@@ -1,5 +1,5 @@
 import { extend } from "../share";
-
+let stopGet= false;
 class ReactiveEffect {
   private fn:any
   onStop:any;
@@ -13,6 +13,7 @@ class ReactiveEffect {
     return this.fn()
   }
   stop() {
+    // stopGet = true;
     if (this.active) {
       cleanupEffect(this)
       this.onStop && this.onStop()
@@ -29,10 +30,14 @@ function cleanupEffect(effect) {
     effect.deps.forEach(dep => {
       dep.delete(effect)
     });
+    effect.deps.length = 0
 }
 
 const targetMap = new Map()
 export function track(target, key) {
+  if (stopGet) {
+    return
+  }
   // track -- key -- dep
   let depsMap = targetMap.get(target)
   if (!depsMap) {
@@ -48,6 +53,7 @@ export function track(target, key) {
 
   dep.add(activeEffect)
   activeEffect && activeEffect.deps.push(dep)
+  // activeEffect.deps.push(dep)
 }
 
 export function trigger(target, key) {

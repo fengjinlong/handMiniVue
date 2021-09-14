@@ -1,14 +1,21 @@
 import { track, trigger } from "./effect"
+import { ReactiveFlegs } from './reactive'
 
 const get = createGetter()
 const set = createSetter()
 
 const readonlyGet = createGetter(true)
 
-function createGetter(idReadOnly: boolean = false): any {
+function createGetter(isReadOnly: boolean = false): any {
   return function get(target, key) {
+    if (key === ReactiveFlegs.IS_REACTIVE) {
+      return !isReadOnly
+    }
+    if (key === ReactiveFlegs.IS_READONLY) {
+      return isReadOnly
+    }
     const res = Reflect.get(target, key)
-    if (!idReadOnly) {
+    if (!isReadOnly) {
       track(target, key)
     }
     return res

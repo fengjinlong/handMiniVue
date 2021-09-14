@@ -1,4 +1,4 @@
-import {readonly} from '../reactive'
+import {isReadOnly, readonly} from '../reactive'
 describe("reactive", () => {
   it("happy path", () => {
     // no set
@@ -7,6 +7,8 @@ describe("reactive", () => {
     const wrapped = readonly(orginal)
 
     expect(wrapped).not.toBe(orginal)
+    expect(isReadOnly(wrapped)).toBe(true)
+    expect(isReadOnly(orginal)).toBe(false)
     expect(orginal.foo).toBe(1)
   }) // set 警告
   it('warn then call set', () => {
