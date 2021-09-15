@@ -1,19 +1,31 @@
-import { extend } from "../share";
-let stopGet= false;
+import { extend } from '../share'
+let activeEffect
+let shouldTrack
 class ReactiveEffect {
-  private fn:any
-  onStop:any;
-  deps = [];
-  active = true;
+  private fn: any
+  onStop: any
+  deps = []
+  active = true
   constructor(fn, public scheduler?: Function | undefined) {
     this.fn = fn
   }
   run() {
+    
+    if (!this.active) {
+      return this.fn()
+    }
+    // 可以收集依赖
+    shouldTrack = true
     activeEffect = this
-    return this.fn()
+
+    // 收集完关闭
+    let result = this.fn()
+    shouldTrack = false
+    return result
+
+
   }
   stop() {
-    // stopGet = true;
     if (this.active) {
       cleanupEffect(this)
       this.onStop && this.onStop()
@@ -26,18 +38,15 @@ class ReactiveEffect {
 }
 
 function cleanupEffect(effect) {
-    
-    effect.deps.forEach(dep => {
-      dep.delete(effect)
-    });
-    effect.deps.length = 0
+  effect.deps.forEach(dep => {
+    dep.delete(effect)
+  })
+  effect.deps.length = 0
 }
 
 const targetMap = new Map()
 export function track(target, key) {
-  if (stopGet) {
-    return
-  }
+  if (!isTracking()) return
   // track -- key -- dep
   let depsMap = targetMap.get(target)
   if (!depsMap) {
@@ -51,9 +60,13 @@ export function track(target, key) {
     depsMap.set(key, dep)
   }
 
+  if (dep.has(activeEffect)) return
   dep.add(activeEffect)
-  activeEffect && activeEffect.deps.push(dep)
-  // activeEffect.deps.push(dep)
+  activeEffect.deps.push(dep)
+}
+
+export function isTracking() {
+  return !!activeEffect && !!shouldTrack
 }
 
 export function trigger(target, key) {
@@ -68,7 +81,6 @@ export function trigger(target, key) {
   }
 }
 
-let activeEffect
 
 interface O {
   scheduler?: Function
