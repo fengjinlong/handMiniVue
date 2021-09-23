@@ -1,7 +1,7 @@
 import { extend } from '../share'
 let activeEffect
 let shouldTrack
-class ReactiveEffect {
+export class ReactiveEffect {
   private fn: any
   onStop: any
   deps = []
