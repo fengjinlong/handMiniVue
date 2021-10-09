@@ -12,8 +12,12 @@ function processComponent(vnode: any, container: any) {
 }
 
 function mountComponent(vnode: any, container: any) {
+  // 组件实例对象 instance
   const instance = createComponnentInstance(vnode)
+
+  // 初始化组件，初始化一些属性挂载
   setupComponnent(instance)
+  
   setupRenderEffect(instance, container)
 }
 function setupRenderEffect(instance: any, container: any) {
@@ -22,4 +26,6 @@ function setupRenderEffect(instance: any, container: any) {
   // vnode -element - mountElement;
   patch(subTree, container)
 }
+
+
 
