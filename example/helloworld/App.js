@@ -1,8 +1,10 @@
 import {
   h
 } from '../../lib/guide-mini-vue.esm.js'
+window.self = null
 export const APP = {
   render() {
+    window.self = this
     return h('div', {
       id: 'root',
       class: ['red', 'head']
@@ -10,14 +12,14 @@ export const APP = {
     // }, 'hi ' + this.msg
     // array
     }, [
-      h('p', {class: 'red'}, 'hi '),
+      h('p', {class: 'red'}, 'hi ' + this.msg),
       h('p', {class: 'green'}, 'mini-vue')
     ]
     )
   },
   setup() {
     return {
-      msg: 'min-vue'
+      msg: 'this setState'
     }
   }
 }
