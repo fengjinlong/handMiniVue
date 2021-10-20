@@ -9,13 +9,13 @@ export function render(vnode, container) {
 function patch(vnode: any, container: any) {
   // 判断vnode是否是element
   // console.log(vnode.type)
-  const {shapeFlag} = vnode
+  const { shapeFlag } = vnode
   // element
   // if (typeof vnode.type === 'string') {
-    //  0001 & 0001 ? 0010 & 0001
+  //  0001 & 0001 ? 0010 & 0001
   if (shapeFlag & ShapeFlags.ELEMENT) {
     processElement(vnode, container)
-  // } else if (isObject(vnode.type)) {
+    // } else if (isObject(vnode.type)) {
     // 0001 & 0010 ? 0010 & 0010
   } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container)
@@ -26,22 +26,27 @@ function processElement(vnode: any, container: any) {
   mountElement(vnode, container)
 }
 function mountElement(vnode: any, container: any) {
-  const el = (vnode.el= document.createElement(vnode.type))
+  const el = (vnode.el = document.createElement(vnode.type))
   // console.log(el)
   const { children, shapeFlag } = vnode
   // if (typeof children === 'string') {
   if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children
-  // } else if (Array.isArray(children)) {
+    // } else if (Array.isArray(children)) {
   } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(vnode, el)
-    
   }
 
   const { props } = vnode
   for (const key in props) {
     const val = props[key]
-    el.setAttribute(key, val)
+    const isOn = (key: string) => /^on[A-Z]/.test(key)
+    if (isOn(key)) {
+      const event = key.slice(2).toLocaleLowerCase()
+      el.addEventListener(event, val)
+    } else {
+      el.setAttribute(key, val)
+    }
   }
   // console.log(el)
   container.append(el)
@@ -60,8 +65,8 @@ function mountComponent(initialVNode: any, container: any) {
 
   setupRenderEffect(instance, initialVNode, container)
 }
-function setupRenderEffect(instance: any,initialVNode:any, container: any) {
-  const {proxy} = instance
+function setupRenderEffect(instance: any, initialVNode: any, container: any) {
+  const { proxy } = instance
   console.log(instance)
 
   const subTree = instance.render.call(proxy)
@@ -75,4 +80,3 @@ function mountChildren(vnode: any, container: any) {
     patch(v, container)
   })
 }
-

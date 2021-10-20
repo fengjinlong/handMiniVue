@@ -6,15 +6,22 @@ export const APP = {
   render() {
     window.self = this
     return h('div', {
-      id: 'root',
-      class: ['red', 'head']
-    // string
-    // }, 'hi ' + this.msg
-    // array
-    }, [
-      h('p', {class: 'red'}, 'hi ' + this.msg),
-      h('p', {class: 'green'}, 'mini-vue')
-    ]
+        id: 'root',
+        class: ['red', 'head'],
+        onClick() {
+          console.log('click')
+        }
+        // string
+      }, 'hi ' + this.msg
+      // array
+      // }, [
+      //   h('p', {
+      //     class: 'red'
+      //   }, 'hi ' + this.msg),
+      //   h('p', {
+      //     class: 'green'
+      //   }, 'mini-vue')
+      // ]
     )
   },
   setup() {
