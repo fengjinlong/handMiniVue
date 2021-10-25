@@ -1,4 +1,4 @@
-import { hasChange, isObject } from '../share'
+import { hasChanged, isObject } from '../shared/index'
 import { isTracking, trackEffects, triggerEffects } from './effect'
 import { reactive } from './reactive'
 
@@ -17,7 +17,7 @@ class RefImp {
     return this._value
   }
   set value(newVal) {
-    if (hasChange(this._value, newVal)) {
+    if (hasChanged(this._value, newVal)) {
       this._rawValue = newVal
       this._value = convert(newVal)
 

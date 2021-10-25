@@ -1,6 +1,6 @@
-import { isObject } from '../share/index'
-import { ShapeFlags } from '../share/ShapeFlags'
-import { createComponnentInstance, setupComponnent } from './component'
+import { isObject } from '../shared/index'
+import { ShapeFlags } from '../shared/ShapeFlags'
+import { createComponentInstance, setupComponent } from './component'
 
 export function render(vnode, container) {
   patch(vnode, container)
@@ -58,16 +58,16 @@ function processComponent(vnode: any, container: any) {
 
 function mountComponent(initialVNode: any, container: any) {
   // 组件实例对象 instance
-  const instance = createComponnentInstance(initialVNode)
+  const instance = createComponentInstance(initialVNode)
 
   // 初始化组件，初始化一些属性挂载
-  setupComponnent(instance)
+  setupComponent(instance)
 
   setupRenderEffect(instance, initialVNode, container)
 }
 function setupRenderEffect(instance: any, initialVNode: any, container: any) {
   const { proxy } = instance
-  console.log(instance)
+  // console.log(instance)
 
   const subTree = instance.render.call(proxy)
   // vnode - patch

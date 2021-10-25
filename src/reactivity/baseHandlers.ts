@@ -1,4 +1,4 @@
-import { extend, isObject } from '../share'
+import { extend, isObject } from '../shared/index'
 import { track, trigger } from './effect'
 import { reactive, ReactiveFlegs, readonly } from './reactive'
 
