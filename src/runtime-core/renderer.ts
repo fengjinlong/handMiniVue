@@ -1,6 +1,7 @@
 import { isObject } from '../shared/index'
 import { ShapeFlags } from '../shared/ShapeFlags'
 import { createComponentInstance, setupComponent } from './component'
+import { Fragment, Text } from './vnode'
 
 export function render(vnode, container) {
   patch(vnode, container)
@@ -9,16 +10,32 @@ export function render(vnode, container) {
 function patch(vnode: any, container: any) {
   // 判断vnode是否是element
   // console.log(vnode.type)
-  const { shapeFlag } = vnode
+  const { type, shapeFlag } = vnode
+
+  // Framement -> 只渲染 children
+
   // element
   // if (typeof vnode.type === 'string') {
   //  0001 & 0001 ? 0010 & 0001
-  if (shapeFlag & ShapeFlags.ELEMENT) {
-    processElement(vnode, container)
-    // } else if (isObject(vnode.type)) {
-    // 0001 & 0010 ? 0010 & 0010
-  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-    processComponent(vnode, container)
+
+  switch (type) {
+    case Fragment:
+      processFragment(vnode, container)
+      break
+
+    case Text:
+      processText(vnode, container)
+      break
+    default:
+      if (shapeFlag & ShapeFlags.ELEMENT) {
+        processElement(vnode, container)
+        // } else if (isObject(vnode.type)) {
+        // 0001 & 0010 ? 0010 & 0010
+      } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+        processComponent(vnode, container)
+      }
+
+      break
   }
 }
 
@@ -80,3 +97,13 @@ function mountChildren(vnode: any, container: any) {
     patch(v, container)
   })
 }
+function processFragment(vnode: any, container: any) {
+  mountChildren(vnode, container)
+}
+function processText(vnode: any, container: any) {
+  const {children} = vnode
+  const textNode = (vnode.el = document.createTextNode(children))
+  container.append(textNode)
+}
+
+
