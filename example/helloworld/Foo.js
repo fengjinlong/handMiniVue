@@ -12,8 +12,6 @@ export const Foo = {
 
   },
   render() {
-    // console.log(this.count)
-    // console.log(Object.keys(this))
     return h("div", {}, "foo: " + this.count);
   },
 };

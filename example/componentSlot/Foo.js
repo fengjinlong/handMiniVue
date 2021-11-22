@@ -1,29 +1,28 @@
-import {
-  h,
-  renderSolts
-} from "../../lib/guide-mini-vue.esm.js";
+import { h, renderSlots } from "../../lib/guide-mini-vue.esm.js";
 
 export const Foo = {
   setup() {
-    return {}
+    return {};
   },
   render() {
-    const foo = h('p', {}, 'foo')
-    console.log(this.$slots)
+    const foo = h("p", {}, "foo");
 
-    // 具名
-    // 获取到渲染元素
-    // 获取渲染位置
-    
-    // 作用域
-    const age = 18
-
+    // Foo .vnode. children
+    console.log(this.$slots);
+    // children -> vnode
+    //
+    // renderSlots
+    // 具名插槽
+    // 1. 获取到要渲染的元素 1
+    // 2. 要获取到渲染的位置
+    // 作用域插槽
+    const age = 18;
     return h("div", {}, [
-      renderSolts(this.$slots, 'header',{
-        age
+      renderSlots(this.$slots, "header", {
+        age,
       }),
       foo,
-      renderSolts(this.$slots, 'footer')
+      renderSlots(this.$slots, "footer"),
     ]);
   },
 };

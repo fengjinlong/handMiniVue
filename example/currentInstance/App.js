@@ -1,18 +1,14 @@
-import {
-  h,
-  getCurrentInstance
-} from '../../lib/guide-mini-vue.esm.js'
-import {
-  Foo
-} from './Foo.js'
+import { h, getCurrentInstance } from "../../lib/guide-mini-vue.esm.js";
+import { Foo } from "./Foo.js";
 
-export const APP = {
+export const App = {
+  name: "App",
   render() {
-    return h('div', {}, [h('p', {}, 'currentInstance demo'), h(Foo)])
+    return h("div", {}, [h("p", {}, "currentInstance demo"), h(Foo)]);
   },
+
   setup() {
-    const instance = getCurrentInstance()
-    console.log('App:', instance)
-   
-  }
-}
+    const instance = getCurrentInstance();
+    console.log("App:", instance);
+  },
+};
